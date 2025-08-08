@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+package votacao.controllers.protos;
+
+message VotoRequest {
+  int32 id_eleicao = 1;
+  int32 id_eleitor = 2;
+  int32 id_candidato = 3;
+}
+
+message ComprovanteVoto {
+  string id_comprovante_voto = 1;
+  int32 id_eleicao = 2;
+  string data_voto = 3;
+  string data_geracao = 4;
+}
+
+message VotoResponse {
+  bool sucesso = 1;
+  string mensagem = 2;
+  ComprovanteVoto comprovante = 3;
+}
+
+message VotoValidoRequest {
+  string id_voto = 1;
+}
+
+message VotoValidoResponse {
+  bool valido = 1;
+  string mensagem = 2;
+}
+
+message EleicaoVotosRequest {
+  int32 id_eleicao = 1;
+}
+
+message VotoInfo {
+  string id_voto = 1;
+  int32 id_candidato = 2;
+  string data_voto = 3;
+}
+
+message EleicaoVotosResponse {
+  repeated VotoInfo votos = 1;
+}
+
+service VotacaoService {
+  rpc Votar (VotoRequest) returns (VotoResponse);
+  rpc GetVotoValido (VotoValidoRequest) returns (VotoValidoResponse);
+  rpc GetEleicaoVotos (EleicaoVotosRequest) returns (EleicaoVotosResponse);
+}

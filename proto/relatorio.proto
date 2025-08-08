@@ -1,0 +1,30 @@
+syntax = "proto3";
+package relatorio;
+
+import "google/protobuf/wrappers.proto";
+import "google/protobuf/timestamp.proto";
+
+service RelatorioService {
+  rpc GerarRelatorio(RelatorioRequest) returns (RelatorioResponse);
+  rpc BuscarRelatorio(RelatorioIdRequest) returns (RelatorioResponse);
+}
+
+message RelatorioRequest {
+  string tipo = 1;
+  string formato = 2;
+  google.protobuf.Int32Value id_verificacao = 3;
+  string criado_por = 4;
+}
+
+message RelatorioIdRequest {
+  int32 id_relatorio = 1;
+}
+
+message RelatorioResponse {
+  string status = 1;
+  string mensagem = 2;
+  int32 id_relatorio = 3;
+  string caminho = 4;
+  google.protobuf.Timestamp data_hora = 5;
+  string criado_por = 6;
+}

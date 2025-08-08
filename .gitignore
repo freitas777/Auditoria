@@ -1,0 +1,19 @@
+# Diretórios de ambiente virtual
+.venv/
+venv/
+
+# Cache do Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+
+# Arquivos de banco de dados local
+*.db
+*.db-journal
+
+# Diretórios de IDEs
+.idea/
+.vscode/
+
