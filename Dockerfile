@@ -9,6 +9,8 @@ RUN apt-get update && \
       libpq-dev postgresql-client netcat-openbsd && \
     rm -rf /var/lib/apt/lists/*
 
+CMD ["python", "app.py"]
+
 WORKDIR /app
 COPY requirements.txt .
 RUN pip install --upgrade pip && pip install -r requirements.txt

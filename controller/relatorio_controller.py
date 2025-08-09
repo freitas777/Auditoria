@@ -84,7 +84,7 @@ def download_relatorio(relatorio_id):
     finally:
         db.close()
 
-@bp_rel.route('/', methods=['GET'])
+@bp_rel.route('/listar', methods=['GET'])
 def listar_relatorios():
     db = SessionLocal()
     try:

@@ -46,7 +46,7 @@ def listar_verificacoes():
     finally:
         db.close()
 
-@bp_ver.route('/obter_votos', methods=["GET"])
+@bp_ver.route('/listar', methods=["GET"])
 def obter_ids_votos():
     db = SessionLocal()
     id_eleicao_padrao = 1 
