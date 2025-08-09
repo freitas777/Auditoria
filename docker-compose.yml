@@ -65,7 +65,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: lucas123
-      POSTGRES_DB: auditoria_docker
+      POSTGRES_DB: auditoria_db
     ports:
       - "5432:5432"
     volumes:
