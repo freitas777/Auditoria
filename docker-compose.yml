@@ -2,14 +2,13 @@
 services:
   app:
     build: .
-    container_name: auditoria_app
+    container_name: auditoria
     env_file: .env
     environment:
       TIPO_SERVICO: app
       DOCKER_ENV: "true"
     ports:
       - "8080:8080"
-      - "50051:50051"
     depends_on:
       rabbitmq:
         condition: service_healthy

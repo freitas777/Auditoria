@@ -25,4 +25,4 @@ COPY . .
 EXPOSE 8080
 
 # Comando para executar a aplicação quando o contêiner for iniciado.
-CMD ["python", "your_app_name.py", “--host”, “0.0.0.0”, “-port”, “8000”]
+CMD ["python", "app.py", “--host”, “0.0.0.0”, “-port”, “8080”]
