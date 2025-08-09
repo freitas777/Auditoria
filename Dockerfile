@@ -1,6 +1,6 @@
 # Usa uma imagem oficial do Python como base.
 # Escolha a versão do Python que você precisa (ex: 3.9-slim-buster, 3.10-alpine, etc.)
-FROM python:3.11-slim
+FROM python:3.13.3
 
 # Define o diretório de trabalho dentro do contêiner.
 # Todos os comandos subsequentes serão executados neste diretório.
