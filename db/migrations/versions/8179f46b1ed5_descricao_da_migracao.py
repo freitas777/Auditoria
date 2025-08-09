@@ -82,3 +82,4 @@ def downgrade() -> None:
 
     op.drop_table('verificacoes')
     # ### end Alembic commands ###
+ 

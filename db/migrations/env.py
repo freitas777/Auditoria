@@ -29,8 +29,8 @@ def is_docker_env():
     return os.environ.get('DOCKER_ENV', 'false').lower() == "true"
 
 if is_docker_env():
-    database_url = os.getenv("DOCKER_DATABASE_URL")
-    env_type = "Docker"
+    database_url = "postgresql://lucas:123@db:5432/auditoria_db"
+    env_type = "Docker/EC2"
 else:
     database_url = os.getenv("LOCAL_DATABASE_URL")
     env_type = "local"
