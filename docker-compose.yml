@@ -1,0 +1,87 @@
+
+services:
+  app:
+    build: .
+    container_name: auditoria
+    env_file: .env
+    environment:
+      TIPO_SERVICO: app
+      DOCKER_ENV: "true"
+    ports:
+      - "8080:8080"
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      db:
+        condition: service_healthy
+    networks:
+      - auditoria_net
+    command: >
+      sh -c "python app.py & 
+      python connection/servidor_grpc.py & 
+      celery -A tasks.celery_app worker --loglevel=info --pool=solo"
+
+  celery_worker:
+    build: .
+    container_name: auditoria_celery_worker
+    env_file: .env
+    environment:
+      TIPO_SERVICO: worker
+      DOCKER_ENV: "true"
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      db:
+        condition: service_healthy
+    networks:
+      - auditoria_net
+    command: celery -A tasks.celery_app worker --loglevel=info --pool=solo
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: auditoria_rabbitmq
+    hostname: rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-guest}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:-guest}
+    ports:
+      - "5672:5672"    
+      - "15672:15672"  
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - auditoria_net
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "check_running"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  db:
+    image: postgres:14-alpine
+    container_name: auditoria_db
+    restart: always
+    env_file: .env
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: lucas123
+      POSTGRES_DB: auditoria_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - auditoria_net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d auditoria_docker"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+networks:
+  auditoria_net:
+    driver: bridge
+
+volumes:
+  db_data:
+  rabbitmq_data:
