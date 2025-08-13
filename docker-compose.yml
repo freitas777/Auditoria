@@ -9,16 +9,16 @@ services:
       DOCKER_ENV: "true"
     ports:
       - "8000:8000"
+    volumes:
+      - ./auditoria.db:/app/auditoria.db 
+      - ./relatorios:/app/relatorios    
     depends_on:
       rabbitmq:
-        condition: service_healthy
-      db:
         condition: service_healthy
     networks:
       - auditoria_net
     command: >
       sh -c "python app.py & 
-      python connection/servidor_grpc.py & 
       celery -A tasks.celery_app worker --loglevel=info --pool=solo"
 
   celery_worker:
