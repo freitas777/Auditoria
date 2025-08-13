@@ -1,33 +1,30 @@
-# Usa uma imagem oficial do Python como base.
-# Escolha a versão do Python que você precisa (ex: 3.9-slim-buster, 3.10-alpine, etc.)
-FROM python:3.11-slim-buster
+# Usa a imagem slim com compiladores básicos
+FROM python:3.9.5-slim-buster
 
-# Define o diretório de trabalho dentro do contêiner.
-# Todos os comandos subsequentes serão executados neste diretório.
 WORKDIR /app
 
-RUN apt-get update \
-    && apt-get -y install libpq-dev gcc \
-    && pip install psycopg2
+# 1. Instala dependências do sistema ANTES do pip
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    gcc \
+    python3-dev \
+    libpq-dev && \
+    rm -rf /var/lib/apt/lists/*
 
-# Copia o arquivo de requisitos para o diretório de trabalho.
-# É uma boa prática copiar apenas este arquivo primeiro para aproveitar o cache do Docker.
 COPY requirements.txt .
 
-# Instala as dependências do Python.
-# O --no-cache-dir evita que o pip armazene pacotes em cache, reduzindo o tamanho da imagem final.
-# O --upgrade pip garante que o pip esteja atualizado.
-RUN pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir -r requirements.txt && 
+# 2. Instalação segura de pacotes
+RUN python -m pip install --no-cache-dir --upgrade pip==23.3.1 && \
+    pip install --no-cache-dir wheel && \
+    pip install --no-cache-dir -r requirements.txt
 
-# Copia o restante do código da aplicação para o diretório de trabalho.
-# O ponto final significa copiar tudo do diretório atual (local) para o WORKDIR (/app no contêiner).
+# 3. Instalação específica do psycopg2 com fallback
+RUN pip install --no-cache-dir psycopg2-binary==2.9.7 || \
+    (echo "Fallback: instalando psycopg2 sem binary" && \
+    pip install --no-cache-dir psycopg2==2.9.7)
+
 COPY . .
 
-# Expõe a porta em que a aplicação será executada.
-# Por exemplo, se sua aplicação Flask/Django roda na porta 5000, você a expõe aqui.
 EXPOSE 8080
 
-# Comando para executar a aplicação quando o contêiner for iniciado.
 CMD ["python", "app.py", "--host", "0.0.0.0", "--port", "8080"]
-
