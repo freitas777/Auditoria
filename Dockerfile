@@ -8,10 +8,11 @@ RUN apt-get update && \
 
 COPY requirements.txt .
 RUN pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir -r requirements.txt
+    pip install --no-cache-dir -r requirements.txt \
+    RUN pip install psycopg2-binary
 
 COPY . .
 
-EXPOSE 8001
+EXPOSE 8080
 
 CMD ["sh", "-c", "python app.py"]

@@ -9,12 +9,9 @@ load_dotenv()
 SQLALCHEMY_DATABASE_URL = "postgresql://postgres:lucas123@db:5432/auditoria_db"
 
 engine = create_engine(
-    SQLALCHEMY_DATABASE_URL, 
-    connect_args={"check_same_thread": False}  
+    SQLALCHEMY_DATABASE_URL,
 )
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
-Base = declarative_base()
 
 Base = declarative_base()
 
