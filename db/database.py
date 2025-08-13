@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-SQLALCHEMY_DATABASE_URL = "sqlite:///./auditoria.db"
+SQLALCHEMY_DATABASE_URL = "postgresql://postgres:lucas123@db:5432/auditoria_db"
 
 engine = create_engine(
     SQLALCHEMY_DATABASE_URL, 
