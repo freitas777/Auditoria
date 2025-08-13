@@ -1,4 +1,5 @@
 from flask import Blueprint, request, jsonify
+from sqlalchemy import func
 from db.database import SessionLocal
 from service.log_service import ServicoLog
 from repository.log_repository import RepositorioLog
@@ -85,7 +86,7 @@ def listar_logs():
         
         repositorio = RepositorioLog(db)
         logs, total_paginas = repositorio.listar_logs_paginados(pagina, limite)
-        total_logs = db.query(Log).count()
+        total_logs = db.query(func.count(Log.id_log)).scalar()
         
         return jsonify({
             "logs": [log.para_dict() for log in logs],

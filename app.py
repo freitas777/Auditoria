@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 import logging
 from datetime import datetime
 import socket
+from db.database import Base, engine
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 if ROOT not in sys.path:
@@ -61,4 +62,5 @@ def create_app():
 
 if __name__ == '__main__':
     app = create_app()
-    app.run(host='0.0.0.0', port=8080, debug=True)
+    Base.metadata.create_all(bind=engine)
+    app.run(host='0.0.0.0', port=8001, debug=True)

@@ -9,7 +9,7 @@ class Verificacao(Base):
     __tablename__ = "verificacoes"
     
     id_verificacao = Column(Integer, primary_key=True, index=True)
-    id_voto = Column(UUID(as_uuid=True), nullable=False)
+    id_voto = Column(String(36), nullable=False)
     comprovante = Column(Text, nullable=False)
     resultado = Column(Boolean, nullable=False)
     mensagem = Column(String, nullable=False)

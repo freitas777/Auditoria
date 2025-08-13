@@ -12,7 +12,7 @@ wait_for_service() {
     echo ">>> $service_name pronto!"
 }
 
-wait_for_service db 5432 "Banco de Dados"
+wait_for_service db 5433 "Banco de Dados"
 wait_for_service rabbitmq 5672 "RabbitMQ"
 
 if [ "$TIPO_SERVICO" = "app" ]; then
