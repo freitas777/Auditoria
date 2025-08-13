@@ -1,15 +1,12 @@
 # Usa a imagem slim com compiladores básicos
-FROM python:3.11-slim
+FROM python:3.8.3-slim-buster
 
 WORKDIR /app
 
 # 1. Instala dependências do sistema ANTES do pip
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-    gcc \
-    python3-dev \
-    libpq-dev && \
-    rm -rf /var/lib/apt/lists/*
+RUN apt-get update \
+    && apt-get -y install libpq-dev gcc \
+    && pip install psycopg2
 
 COPY requirements.txt .
 
