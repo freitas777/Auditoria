@@ -15,4 +15,4 @@ COPY . .
 
 EXPOSE 8080
 
-CMD ["sh", "-c", "python app.py"]
+CMD ["python", "app.py", “--host”, “0.0.0.0”, “-port”, 8080]
