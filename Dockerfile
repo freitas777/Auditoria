@@ -1,5 +1,5 @@
 # Usa a imagem slim com compiladores básicos
-FROM python:3.3.11
+FROM python:3.11-slim
 
 WORKDIR /app
 
