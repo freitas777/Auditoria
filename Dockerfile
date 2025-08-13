@@ -1,26 +1,28 @@
-# Usa a imagem slim com compiladores básicos
-FROM python:3.11-slim-buster
+# Usa a versão BOOKWORM (Debian 12 estável)
+FROM python:3.11-slim-bookworm
 
 WORKDIR /app
 
-# 1. Instala dependências do sistema ANTES do pip
-RUN apt-get update && \
+# 1. Configura fontes APT para Bookworm e instala dependências
+RUN echo "deb http://deb.debian.org/debian bookworm main" > /etc/apt/sources.list && \
+    echo "deb http://deb.debian.org/debian-security bookworm-security main" >> /etc/apt/sources.list && \
+    echo "deb http://deb.debian.org/debian bookworm-updates main" >> /etc/apt/sources.list && \
+    apt-get update && \
     apt-get install -y --no-install-recommends \
     gcc \
     python3-dev \
     libpq-dev && \
     rm -rf /var/lib/apt/lists/*
 
+# 2. Instalação otimizada do pip e pacotes
 COPY requirements.txt .
-
-# 2. Instalação segura de pacotes
 RUN python -m pip install --no-cache-dir --upgrade pip==23.3.1 && \
     pip install --no-cache-dir wheel && \
     pip install --no-cache-dir -r requirements.txt
 
-# 3. Instalação específica do psycopg2 com fallback
+# 3. Fallback para psycopg2 (se necessário)
 RUN pip install --no-cache-dir psycopg2-binary==2.9.7 || \
-    (echo "Fallback: instalando psycopg2 sem binary" && \
+    (echo "Fallback: Building psycopg2 from source" && \
     pip install --no-cache-dir psycopg2==2.9.7)
 
 COPY . .
